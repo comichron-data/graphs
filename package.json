@@ -1,0 +1,21 @@
+{
+  "name": "awesomplete-test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "awesomplete": "1.1.1",
+    "chartist": "0.9.8",
+    "superagent": "2.2.0"
+  },
+  "devDependencies": {
+    "webpack": "^1.13.2"
+  }
+}
