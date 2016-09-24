@@ -6594,14 +6594,14 @@
 	  }
 	};
 
-	function onlyYearChanges(x, y) {
-	  if (isYearChange(x)) {
+	function onlyYearChanges(x, y, allXValues) {
+	  if (isYearChange(x, allXValues)) {
 	    return parseYear(x);
 	  }
 	}
 
-	function monthsWithYearChanges(x, y) {
-	  if (isYearChange(x)) {
+	function monthsWithYearChanges(x, y, allXValues) {
+	  if (isYearChange(x, allXValues)) {
 	    return parseYear(x);
 	  } else {
 	    return parseMonth(x);
@@ -6612,16 +6612,20 @@
 	  return x;
 	}
 
-	function isYearChange(yearMonth) {
-	  return parseMonth(yearMonth) == '1';
+	function isYearChange(yearMonth, allXValues) {
+	  var index = allXValues.indexOf(yearMonth);
+	  var previous = allXValues[index - 1];
+
+	  // this is first date or previous date's year is different
+	  return !previous || parseYear(previous) != parseYear(yearMonth);
 	}
 
 	function parseYear(yearMonth) {
-	  return yearMonth.split('-')[0];
+	  return Number(yearMonth.split('-')[0]);
 	}
 
 	function parseMonth(yearMonth) {
-	  return yearMonth.split('-')[1];
+	  return Number(yearMonth.split('-')[1]);
 	}
 
 
@@ -6630,6 +6634,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var Chartist = __webpack_require__(10);
+	var makeLabelInterpolator = __webpack_require__(13);
 
 	var graph;
 
@@ -6643,8 +6648,14 @@
 	    series: [records.map(toValue)]
 	  };
 
+	  var options = {
+	    axisX: {
+	      labelInterpolationFnc: makeLabelInterpolator(records.length)
+	    }
+	  };
+
 	  if (graph) graph.detach();
-	  graph = new Chartist.Bar(container(), data);
+	  graph = new Chartist.Bar(container(), data, options);
 	}
 
 	function toLabel(record) {
@@ -6657,6 +6668,34 @@
 
 	function container() {
 	  return document.querySelector('#by-issue');
+	}
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	module.exports = makeInterpolator;
+
+	function makeInterpolator(recordCount) {
+	  if (recordCount > 50) {
+	    return everyTenWithNumberOnes;
+	  } else {
+	    return allIssues;
+	  }
+
+	}
+
+	function allIssues(x, y) {
+	  return x;
+	}
+
+	function everyTenWithNumberOnes(x, y) {
+	  var issueNumber = Number(x);
+
+	  if (issueNumber == 1 || issueNumber % 10 == 0) {
+	    return issueNumber;
+	  }
 	}
 
 
