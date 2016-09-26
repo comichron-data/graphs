@@ -6,16 +6,26 @@
 
   <link rel="stylesheet" href="css/awesomplete.css" />
   <link rel="stylesheet" href="css/chartist.min.css">
+  <link rel="stylesheet" href="css/chartist-plugin-tooltip.css">
+  <style>
+    #by-month {
+      height: 30vh;
+    }
+
+    #by-issue {
+      height: 30vh;
+    }
+  </style>
 </head>
 <body>
 
   Title <input type="text" class="awesomplete" id="title-picker">
 
   <h2>By Month</h2>
-  <div id="by-month"></div>
+  <div id="by-month" class="ct-chart"></div>
 
   <h2>By Issue</h2>
-  <div id="by-issue"></div>
+  <div id="by-issue" class="ct-chart"></div>
 
   <script src="./bundle.js"></script>
 </body>

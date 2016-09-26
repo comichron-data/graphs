@@ -13,6 +13,7 @@
   "dependencies": {
     "awesomplete": "1.1.1",
     "chartist": "0.9.8",
+    "chartist-plugin-tooltips": "0.0.17",
     "superagent": "2.2.0"
   },
   "devDependencies": {
