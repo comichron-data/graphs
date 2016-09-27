@@ -87,8 +87,8 @@
 
 	var request = __webpack_require__(2);
 
-	// var baseUrl = 'https://comichron-data.github.io/api';
-	var baseUrl = 'http://localhost:3000';
+	var baseUrl = 'https://comichron-data.github.io/api';
+	// var baseUrl = 'http://localhost:3000';
 
 	module.exports = {
 	  titles: loadTitles,
