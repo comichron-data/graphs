@@ -47,7 +47,7 @@
 	var client = __webpack_require__(1);
 	var titlePicker = __webpack_require__(7);
 	var monthGraph = __webpack_require__(9);
-	var issueGraph = __webpack_require__(13);
+	var issueGraph = __webpack_require__(15);
 
 	loadTitles();
 
@@ -87,8 +87,8 @@
 
 	var request = __webpack_require__(2);
 
-	var baseUrl = 'https://comichron-data.github.io/api';
-	// var baseUrl = 'http://localhost:3000';
+	// var baseUrl = 'https://comichron-data.github.io/api';
+	var baseUrl = 'http://localhost:3000';
 
 	module.exports = {
 	  titles: loadTitles,
@@ -2209,6 +2209,7 @@
 	__webpack_require__(11);
 
 	var makeLabelInterpolator = __webpack_require__(12);
+	var tooltip = __webpack_require__(14);
 
 	var graph;
 
@@ -2228,7 +2229,7 @@
 	    },
 	    plugins: [
 	      Chartist.plugins.tooltip({
-	        tooltipFnc: makeTooltipText,
+	        tooltipFnc: tooltip,
 	        appendToBody: true
 	      })
 	    ]
@@ -2236,20 +2237,6 @@
 
 	  if (graph) graph.detach();
 	  graph = new Chartist.Bar(container(), data, options);
-	}
-
-	function makeTooltipText(meta, value) {
-	  var date = parseMeta(meta);
-
-	  return value + ' in ' + date.year + '-' + date.month;
-	}
-
-	function parseMeta(label) {
-	  var parts = label.split('-');
-	  return {
-	    year: Number(parts[0]),
-	    month: Number(parts[1])
-	  };
 	}
 
 	function toLabel(record) {
@@ -6819,7 +6806,9 @@
 
 /***/ },
 /* 12 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	var monthByNumber = __webpack_require__(13);
 
 	module.exports = function(recordCount) {
 	  if (recordCount > 100) {
@@ -6839,14 +6828,14 @@
 
 	function monthsWithYearChanges(x, y, allXValues) {
 	  if (isYearChange(x, allXValues)) {
-	    return parseYear(x);
+	    return monthsWithYears(x);
 	  } else {
-	    return parseMonth(x);
+	    return monthByNumber(parseMonth(x));
 	  }
 	}
 
-	function monthsWithYears(x, y) {
-	  return x;
+	function monthsWithYears(x) {
+	  return monthByNumber(parseMonth(x)) + ' ' + parseYear(x);
 	}
 
 	function isYearChange(yearMonth, allXValues) {
@@ -6868,10 +6857,64 @@
 
 /***/ },
 /* 13 */
+/***/ function(module, exports) {
+
+	module.exports = nameByNumber;
+
+	var monthsByNumber = {
+	  1: 'Jan',
+	  2: 'Feb',
+	  3: 'Mar',
+	  4: 'Apr',
+	  5: 'May',
+	  6: 'Jun',
+	  7: 'Jul',
+	  8: 'Aug',
+	  9: 'Sep',
+	  10: 'Oct',
+	  11: 'Nov',
+	  12: 'Dec'
+	};
+
+	function nameByNumber(number) {
+	  return monthsByNumber[number] || noMonthForNumber(number);
+	}
+
+	function noMonthForNumber(number) {
+	  throw new Error('No month for number ' + number);
+	}
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var monthByNumber = __webpack_require__(13);
+
+	module.exports = function tooltip(meta, value) {
+	  var date = parseMeta(meta);
+
+	  return value + ' in ' + monthByNumber(date.month) + ' ' + date.year;
+	};
+
+	function parseMeta(label) {
+	  var parts = label.split('-');
+	  return {
+	    year: Number(parts[0]),
+	    month: Number(parts[1])
+	  };
+	}
+
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Chartist = __webpack_require__(10);
-	var makeLabelInterpolator = __webpack_require__(14);
+	__webpack_require__(11);
+
+	var makeLabelInterpolator = __webpack_require__(16);
+	var tooltip = __webpack_require__(17);
 
 	var graph;
 
@@ -6888,7 +6931,13 @@
 	  var options = {
 	    axisX: {
 	      labelInterpolationFnc: makeLabelInterpolator(records.length)
-	    }
+	    },
+	    plugins: [
+	      Chartist.plugins.tooltip({
+	        tooltipFnc: tooltip,
+	        appendToBody: true
+	      })
+	    ]
 	  };
 
 	  if (graph) graph.detach();
@@ -6900,7 +6949,10 @@
 	}
 
 	function toValue(record) {
-	  return record.count;
+	  return {
+	    meta: toLabel(record),
+	    value: record.count
+	  };
 	}
 
 	function container() {
@@ -6909,7 +6961,7 @@
 
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = makeInterpolator;
@@ -6934,6 +6986,15 @@
 	    return issueNumber;
 	  }
 	}
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	module.exports = function tooltip(meta, value) {
+	  return value + ' of #' + meta;
+	};
 
 
 /***/ }
