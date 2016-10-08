@@ -1,4 +1,4 @@
-var client = require('./lib/client');
+var client = require('comichron-data-browser-client');
 var titlePicker = require('./lib/title-picker');
 var monthGraph = require('./lib/month-graph');
 var issueGraph = require('./lib/issue-graph');
@@ -19,17 +19,17 @@ function onSelect(id) {
 }
 
 function loadByMonthData(id) {
-  client.byMonth(id, function(err, records) {
+  client.byMonth(id, function(err, data) {
     if (err) throw err;
 
-    monthGraph.render(records)
+    monthGraph.render(data.records)
   });
 }
 
 function loadByIssueData(id) {
-  client.byIssue(id, function(err, records) {
+  client.byIssue(id, function(err, data) {
     if (err) throw err;
 
-    issueGraph.render(records);
+    issueGraph.render(data.records);
   });
 }

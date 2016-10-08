@@ -14,7 +14,7 @@
     "awesomplete": "1.1.1",
     "chartist": "0.9.8",
     "chartist-plugin-tooltips": "0.0.17",
-    "superagent": "2.2.0"
+    "comichron-data-browser-client": "2.0.0"
   },
   "devDependencies": {
     "webpack": "^1.13.2"
