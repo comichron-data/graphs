@@ -48,6 +48,7 @@
 	var titlePicker = __webpack_require__(3);
 	var monthGraph = __webpack_require__(5);
 	var issueGraph = __webpack_require__(11);
+	var idDisplay = __webpack_require__(14);
 
 	loadTitles();
 
@@ -60,6 +61,7 @@
 	}
 
 	function onSelect(id) {
+	  idDisplay.render(id);
 	  loadByMonthData(id);
 	  loadByIssueData(id);
 	}
@@ -5478,6 +5480,20 @@
 	module.exports = function tooltip(meta, value) {
 	  return value + ' of #' + meta;
 	};
+
+
+/***/ },
+/* 14 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  render: render
+	};
+
+	function render(id) {
+	  var display = document.getElementById('id-display');
+	  display.textContent = '(id: ' + id + ')';
+	}
 
 
 /***/ }
